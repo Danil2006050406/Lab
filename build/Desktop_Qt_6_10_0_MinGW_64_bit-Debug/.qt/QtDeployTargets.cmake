@@ -1,0 +1,5 @@
+set(__QT_DEPLOY_TARGET_LibraryCore_FILE C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/lib/libLibraryCore.a)
+set(__QT_DEPLOY_TARGET_LibraryCore_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_LibraryGui_FILE C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui.exe)
+set(__QT_DEPLOY_TARGET_LibraryGui_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_LibraryGui_RUNTIME_DLLS C:/Qt/6.10.0/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.10.0/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.10.0/mingw_64/bin/Qt6Core.dll)

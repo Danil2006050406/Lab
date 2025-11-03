@@ -1,0 +1,31 @@
+# ninja log v6
+12	244	7839095318296219	lib/CMakeFiles/LibraryCore.dir/Loan.cpp.obj	2d0b5fe48818eb5f
+4	295	7839090181967785	lib/CMakeFiles/LibraryCore.dir/Book.cpp.obj	6655c7e77f1fa9b5
+9	245	7839095318266196	lib/CMakeFiles/LibraryCore.dir/User.cpp.obj	13736e502e78731
+16	259	7839095318341344	lib/CMakeFiles/LibraryCore.dir/LibraryUtils.cpp.obj	e64edb502cf1f0aa
+14	265	7839095318316260	lib/CMakeFiles/LibraryCore.dir/Library.cpp.obj	223670b2a1d6970a
+324	441	7839095321420473	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/timestamp	dd173c691462883c
+324	441	7839095321420473	app/LibraryGui_autogen/timestamp	dd173c691462883c
+324	441	7839095321420473	app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+265	324	7839095320821385	lib/libLibraryCore.a	ecf1068c2d022231
+324	441	7839095321420473	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+913	2450	7839090191058866	app/CMakeFiles/LibraryGui.dir/LibraryGui_autogen/mocs_compilation.cpp.obj	b6e604c6f55c2e2f
+917	2455	7839090191098852	app/CMakeFiles/LibraryGui.dir/main.cpp.obj	60e0a72ce0d2bbae
+920	5234	7839090191128874	app/CMakeFiles/LibraryGui.dir/mainwindow.cpp.obj	8d6b0776b91ccaa
+5237	5572	7839090234296477	app/LibraryGui.exe	4006738bb216f4ea
+9	126	7839096968881054	app/LibraryGui_autogen/timestamp	dd173c691462883c
+9	126	7839096968881054	app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+9	126	7839096968881054	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/timestamp	dd173c691462883c
+9	126	7839096968881054	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+127	4508	7839096970059132	app/CMakeFiles/LibraryGui.dir/mainwindow.cpp.obj	8d6b0776b91ccaa
+24	141	7839098235908692	app/LibraryGui_autogen/timestamp	dd173c691462883c
+24	141	7839098235908692	app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+24	141	7839098235908692	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/timestamp	dd173c691462883c
+24	141	7839098235908692	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+141	4470	7839098237086291	app/CMakeFiles/LibraryGui.dir/mainwindow.cpp.obj	8d6b0776b91ccaa
+25	137	7839100245420319	app/LibraryGui_autogen/timestamp	dd173c691462883c
+25	137	7839100245420319	app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+25	137	7839100245420319	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/timestamp	dd173c691462883c
+25	137	7839100245420319	C:/Users/38093/Documents/Qt projects/Lab/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/app/LibraryGui_autogen/mocs_compilation.cpp	dd173c691462883c
+138	4297	7839100246544966	app/CMakeFiles/LibraryGui.dir/mainwindow.cpp.obj	8d6b0776b91ccaa
+4297	4614	7839100288137358	app/LibraryGui.exe	4006738bb216f4ea
