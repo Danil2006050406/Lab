@@ -65,30 +65,24 @@ namespace {
         }
     }
 
-    // ---------------- JSON: Readers ----------------
     void loadReadersFromJson(Library& lib, const std::string& filename) {
         std::ifstream f(filename);
         if (!f) return;
 
         json data;
-        try {
-            f >> data;
-        }
-        catch (const json::parse_error& e) {
-            QMessageBox::critical(nullptr, "Помилка JSON",
-                QString("Помилка читання файлу:\n%1").arg(e.what()));
-            return;
-        }
+        f >> data;
 
         for (const auto& r : data) {
-            std::string id = r.value("id", "");
-            std::string name = r.value("name", "");
+            std::string id    = r.value("id",    "");
+            std::string name  = r.value("name",  "");
             std::string email = r.value("email", "");
-            lib.addReader(name, id, email);
+
+            // >>> LAb1: addReader(const Reader& reader)
+            Reader reader(name, id, email);
+            lib.addReader(reader);
         }
     }
 
-    // ---------------- TXT: Readers ----------------
     void loadReadersFromFile(Library& lib, const std::string& filename) {
         std::ifstream f(filename);
         if (!f) return;
@@ -100,13 +94,16 @@ namespace {
             std::stringstream ss(line);
             std::string name, id, email;
 
-            std::getline(ss, name, ';');
-            std::getline(ss, id, ';');
+            std::getline(ss, name,  ';');
+            std::getline(ss, id,    ';');
             std::getline(ss, email, ';');
 
-            lib.addReader(name, id, email);
+            // >>> LAb1: addReader(const Reader& reader)
+            Reader reader(name, id, email);
+            lib.addReader(reader);
         }
     }
+
 
 } // namespace
 // ==============================================
@@ -231,17 +228,25 @@ void MainWindow::refreshView() {
 }
 
 void MainWindow::fillModel() {
-    model_->removeRows(0, model_->rowCount());
-    for (const auto& b : lib_->getBooks()) {
+    model_->clear();
+    model_->setHorizontalHeaderLabels(
+        {"Title", "Author", "ISBN", "Year", "Total"}
+        );
+
+
+    // >>> ВАЖЛИВО: у LAb1 немає getBooks(), є listBooks()
+    const auto& books = lib_->getBooks();
+    for (const auto& b : books) {
         QList<QStandardItem*> row;
         row << new QStandardItem(QString::fromStdString(b.getTitle()));
         row << new QStandardItem(QString::fromStdString(b.getAuthor()));
         row << new QStandardItem(QString::fromStdString(b.getISBN()));
         row << new QStandardItem(QString::number(b.getYear()));
-        row << new QStandardItem(QString::number(b.getTotal()));
-        row << new QStandardItem(b.isAvailable() ? "Yes" : "No");
+        row << new QStandardItem(QString::number(b.getTotalCopies()));
         model_->appendRow(row);
     }
+
+    table_->resizeColumnsToContents();
 }
 
 void MainWindow::filterTextChanged(const QString& t) {
@@ -280,29 +285,35 @@ void MainWindow::returnSelected() {
 }
 
 void MainWindow::showReaders() {
-    const auto& readers = lib_->getReaders();
-    if (readers.empty()) {
-        QMessageBox::information(this, "Readers", "The list is empty. Please load readers.txt first.");
-        return;
-    }
-
     QDialog dlg(this);
-    dlg.setWindowTitle("Readers List");
-    dlg.resize(560, 420);
+    dlg.setWindowTitle("Readers");
 
-    QVBoxLayout layout(&dlg);
-    QTableWidget table(&dlg);
-    table.setColumnCount(3);
-    table.setHorizontalHeaderLabels({"Name", "ID", "Email"});
-    table.horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    auto layout = new QVBoxLayout(&dlg);
+    auto view   = new QTableView(&dlg);
+    auto model  = new QStandardItemModel(&dlg);
 
-    table.setRowCount(static_cast<int>(readers.size()));
-    for (int i = 0; i < static_cast<int>(readers.size()); ++i) {
-        table.setItem(i, 0, new QTableWidgetItem(QString::fromStdString(readers[i].getName())));
-        table.setItem(i, 1, new QTableWidgetItem(QString::fromStdString(readers[i].getId())));
-        table.setItem(i, 2, new QTableWidgetItem(QString::fromStdString(readers[i].getEmail())));
+    model->setHorizontalHeaderLabels({"ID", "Name", "Email"});
+
+    // >>> ВАЖЛИВО: у LAb1 немає getReaders(), є listReaders()
+    const auto& readers = lib_->getReaders();
+
+    for (const auto& r : readers) {
+        QList<QStandardItem*> row;
+        row << new QStandardItem(QString::fromStdString(r.getId()));
+        row << new QStandardItem(QString::fromStdString(r.getName()));
+        row << new QStandardItem(QString::fromStdString(r.getEmail()));
+        model->appendRow(row);
     }
 
-    layout.addWidget(&table);
+
+    view->setModel(model);
+    view->resizeColumnsToContents();
+    layout->addWidget(view);
+
+    auto btnClose = new QPushButton("Close");
+    QObject::connect(btnClose, &QPushButton::clicked, &dlg, &QDialog::accept);
+    layout->addWidget(btnClose);
+
     dlg.exec();
 }
+
