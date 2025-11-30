@@ -1,0 +1,17 @@
+[
+  {
+    "title": "The Art of War",
+    "author": "Sun Tzu",
+    "isbn": "978-617-12-0001",
+    "year": 2019,
+    "totalCopies": 5
+  },
+  {
+    "title": "The Toreadors from Vasyukivka",
+    "author": "Vsevolod Nestayko",
+    "isbn": "978-617-09-5566",
+    "year": 2020,
+    "totalCopies": 3
+  }
+]
+
