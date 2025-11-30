@@ -13,7 +13,11 @@ add_executable(LibraryGui
 )
 
 target_link_libraries(LibraryGui PRIVATE Qt6::Widgets LibraryCore)
-target_include_directories(LibraryGui PRIVATE ${CMAKE_SOURCE_DIR}/lib)
+
+target_include_directories(LibraryGui PRIVATE
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/external        # тут лежить nlohmann/json.hpp
+)
 
 # скопировать тест-данные рядом с exe
 add_custom_command(TARGET LibraryGui POST_BUILD
@@ -24,3 +28,4 @@ add_custom_command(TARGET LibraryGui POST_BUILD
     ${CMAKE_CURRENT_SOURCE_DIR}/readers.txt
     $<TARGET_FILE_DIR:LibraryGui>/readers.txt
 )
+

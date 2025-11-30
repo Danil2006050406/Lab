@@ -2,49 +2,115 @@
 #include <QtWidgets>
 #include <fstream>
 #include <sstream>
+#include <QMessageBox>
 
 #include "Library.h"
 #include "Book.h"
 #include "User.h"
+#include <nlohmann/json.hpp>
 
+using nlohmann::json;
+
+
+// ======== Helper functions (loaders) ========
 // ======== Helper functions (loaders) ========
 namespace {
 
-void loadBooksFromFile(Library& lib, const std::string& filename) {
-    std::ifstream f(filename);
-    if (!f) return;
-    std::string line;
-    while (std::getline(f, line)) {
-        if (line.empty()) continue;
-        std::stringstream ss(line);
-        std::string title, author, isbn;
-        int year = 0, copies = 1;
-        std::getline(ss, title,  ';');
-        std::getline(ss, author, ';');
-        std::getline(ss, isbn,   ';');
-        ss >> year; if (ss.peek() == ';') ss.ignore();
-        ss >> copies;
-        lib.addBook(Book(title, author, isbn, year, copies));
-    }
-}
+    // ---------------- TXT: Books ----------------
+    void loadBooksFromFile(Library& lib, const std::string& filename) {
+        std::ifstream f(filename);
+        if (!f) return;
 
-void loadReadersFromFile(Library& lib, const std::string& filename) {
-    std::ifstream f(filename);
-    if (!f) return;
-    std::string line;
-    while (std::getline(f, line)) {
-        if (line.empty()) continue;
-        std::stringstream ss(line);
-        std::string name, id, email;
-        std::getline(ss, name,  ';');
-        std::getline(ss, id,    ';');
-        std::getline(ss, email, ';');
-        lib.addReader(name, id, email);
+        std::string line;
+        while (std::getline(f, line)) {
+            if (line.empty()) continue;
+
+            std::stringstream ss(line);
+            std::string title, author, isbn;
+            int year = 0, copies = 1;
+
+            std::getline(ss, title, ';');
+            std::getline(ss, author, ';');
+            std::getline(ss, isbn, ';');
+            ss >> year;
+            if (ss.peek() == ';') ss.ignore();
+            ss >> copies;
+
+            lib.addBook(Book(title, author, isbn, year, copies));
+        }
     }
-}
+
+    // ---------------- JSON: Books ----------------
+    void loadBooksFromJson(Library& lib, const std::string& filename) {
+        std::ifstream f(filename);
+        if (!f) return;
+
+        json data;
+        try {
+            f >> data;
+        }
+        catch (const json::parse_error& e) {
+            QMessageBox::critical(nullptr, "Помилка JSON",
+                QString("Помилка читання файлу:\n%1").arg(e.what()));
+            return;
+        }
+
+        for (const auto& b : data) {
+            std::string title = b.value("title", "");
+            std::string author = b.value("author", "");
+            std::string isbn = b.value("isbn", "");
+            int year = b.value("year", 0);
+            int copies = b.value("totalCopies", 1);
+            lib.addBook(Book(title, author, isbn, year, copies));
+        }
+    }
+
+    // ---------------- JSON: Readers ----------------
+    void loadReadersFromJson(Library& lib, const std::string& filename) {
+        std::ifstream f(filename);
+        if (!f) return;
+
+        json data;
+        try {
+            f >> data;
+        }
+        catch (const json::parse_error& e) {
+            QMessageBox::critical(nullptr, "Помилка JSON",
+                QString("Помилка читання файлу:\n%1").arg(e.what()));
+            return;
+        }
+
+        for (const auto& r : data) {
+            std::string id = r.value("id", "");
+            std::string name = r.value("name", "");
+            std::string email = r.value("email", "");
+            lib.addReader(name, id, email);
+        }
+    }
+
+    // ---------------- TXT: Readers ----------------
+    void loadReadersFromFile(Library& lib, const std::string& filename) {
+        std::ifstream f(filename);
+        if (!f) return;
+
+        std::string line;
+        while (std::getline(f, line)) {
+            if (line.empty()) continue;
+
+            std::stringstream ss(line);
+            std::string name, id, email;
+
+            std::getline(ss, name, ';');
+            std::getline(ss, id, ';');
+            std::getline(ss, email, ';');
+
+            lib.addReader(name, id, email);
+        }
+    }
 
 } // namespace
-// ===========================================
+// ==============================================
+
 
 // >>> ВАЖНО: РЕАЛИЗАЦИЯ КОНСТРУКТОРА <<<
 MainWindow::MainWindow(QWidget* parent)
@@ -117,19 +183,45 @@ void MainWindow::setupUi() {
 }
 
 void MainWindow::loadBooks() {
-    const QString p = QFileDialog::getOpenFileName(this, "Select books.txt", {}, "Text (*.txt);;All (*.*)");
+    const QString p = QFileDialog::getOpenFileName(
+        this,
+        "Select books file",
+        {},
+        "Text or JSON (*.txt *.json);;All (*.*)"
+    );
     if (p.isEmpty()) return;
+
     lastBooksPath_ = p;
-    loadBooksFromFile(*lib_, p.toStdString());
+
+    if (p.endsWith(".json", Qt::CaseInsensitive)) {
+        loadBooksFromJson(*lib_, p.toStdString());
+    }
+    else {
+        loadBooksFromFile(*lib_, p.toStdString());
+    }
+
     refreshView();
     status_->setText("Books: " + QFileInfo(p).fileName());
 }
 
 void MainWindow::loadReaders() {
-    const QString p = QFileDialog::getOpenFileName(this, "Select readers.txt", {}, "Text (*.txt);;All (*.*)");
+    const QString p = QFileDialog::getOpenFileName(
+        this,
+        "Select readers file",
+        {},
+        "Text or JSON (*.txt *.json);;All (*.*)"
+    );
     if (p.isEmpty()) return;
+
     lastReadersPath_ = p;
-    loadReadersFromFile(*lib_, p.toStdString());
+
+    if (p.endsWith(".json", Qt::CaseInsensitive)) {
+        loadReadersFromJson(*lib_, p.toStdString());
+    }
+    else {
+        loadReadersFromFile(*lib_, p.toStdString());
+    }
+
     status_->setText("Readers: " + QFileInfo(p).fileName());
 }
 
